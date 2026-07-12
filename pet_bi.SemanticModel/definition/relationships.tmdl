@@ -1,0 +1,23 @@
+relationship 1848a030-5ec2-413b-a796-0022b3eee766
+	joinOnDateBehavior: datePartOnly
+	fromColumn: customers.date_of_birth
+	toColumn: LocalDateTable_27907449-4d83-4dd5-8b09-6cdb8fd502b2.Date
+
+relationship ab81ee57-579b-4005-9cd6-52fab692b5bf
+	joinOnDateBehavior: datePartOnly
+	fromColumn: customers.join_date
+	toColumn: LocalDateTable_98a9b7b2-fdd8-4b11-9ef5-1c5697aae247.Date
+
+relationship AutoDetected_712f6aa8-acda-4c5f-b02b-0679e1ea22ac
+	fromColumn: finance_transactions.customer_id
+	toColumn: customers.customer_id
+
+relationship bdc3cdaa-2f48-4f73-b459-0798c71799b8
+	joinOnDateBehavior: datePartOnly
+	fromColumn: calendar.Date
+	toColumn: LocalDateTable_d1f2cb16-0c74-406c-bcfd-44dc9f4ae269.Date
+
+relationship fa628b27-8507-6a67-4024-65c3edad28d9
+	fromColumn: finance_transactions.transaction_date
+	toColumn: calendar.Date
+

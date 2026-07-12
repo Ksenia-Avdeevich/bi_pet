@@ -1,0 +1,117 @@
+table customers
+	lineageTag: 26096bb8-941d-49f9-ab88-976ee0fcadb8
+
+	column customer_id
+		dataType: string
+		lineageTag: 8a65c808-af75-486a-85ce-0b310fa0859e
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column gender
+		dataType: string
+		lineageTag: 7ffda4bd-6f44-4b1e-86dc-ccd8e74fc414
+		summarizeBy: none
+		sourceColumn: gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_of_birth
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: affac4df-c493-4d31-8f5e-2878cadcb18f
+		summarizeBy: none
+		sourceColumn: date_of_birth
+
+		variation Изменение
+			isDefault
+			relationship: 1848a030-5ec2-413b-a796-0022b3eee766
+			defaultHierarchy: LocalDateTable_27907449-4d83-4dd5-8b09-6cdb8fd502b2.'Иерархия дат'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column city
+		dataType: string
+		lineageTag: e08e410f-d62e-428e-a79e-c3c3394d2887
+		summarizeBy: none
+		sourceColumn: city
+
+		annotation SummarizationSetBy = Automatic
+
+	column state
+		dataType: string
+		lineageTag: bc1ccf23-a9af-4db0-8516-212970566e98
+		summarizeBy: none
+		sourceColumn: state
+
+		annotation SummarizationSetBy = Automatic
+
+	column occupation
+		dataType: string
+		lineageTag: a8c6e9f2-6dae-4bf3-83b9-750ce3b48ca9
+		summarizeBy: none
+		sourceColumn: occupation
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_segment
+		dataType: string
+		lineageTag: b546f5cc-cee8-4bd9-b3dd-405d3bc3d237
+		summarizeBy: none
+		sourceColumn: customer_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column annual_income
+		dataType: double
+		lineageTag: cc059de7-d17f-419c-9a67-566eb2d291ef
+		summarizeBy: sum
+		sourceColumn: annual_income
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column join_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: f2971a68-bf42-4698-ad37-3e71976388bc
+		summarizeBy: none
+		sourceColumn: join_date
+
+		variation Изменение
+			isDefault
+			relationship: ab81ee57-579b-4005-9cd6-52fab692b5bf
+			defaultHierarchy: LocalDateTable_98a9b7b2-fdd8-4b11-9ef5-1c5697aae247.'Иерархия дат'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column customer_name
+		dataType: string
+		lineageTag: dd7675e0-5986-40c0-9160-cadea282f3bf
+		summarizeBy: none
+		sourceColumn: customer_name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition customers = m
+		mode: import
+		source =
+				let
+				    Источник = Csv.Document(File.Contents("D:\личное\т-банк экз\2026\пэт\bi\customers.csv"),[Delimiter=";", Columns=11, Encoding=1251, QuoteStyle=QuoteStyle.None]),
+				    #"Повышенные заголовки" = Table.PromoteHeaders(Источник, [PromoteAllScalars=true]),
+				    #"Измененный тип" = Table.TransformColumnTypes(#"Повышенные заголовки",{{"customer_id", type text}, {"fisrt_name", type text}, {"second_name", type text}, {"gender", type text}, {"date_of_birth", type date}, {"city", type text}, {"state", type text}, {"occupation", type text}, {"customer_segment", type text}, {"annual_income", type text}, {"join_date", type date}}),
+				    #"Измененный тип с языком" = Table.TransformColumnTypes(#"Измененный тип", {{"annual_income", type number}}, "en-US"),
+				    #"Объединенные столбцы" = Table.CombineColumns(#"Измененный тип с языком",{"fisrt_name", "second_name"},Combiner.CombineTextByDelimiter(" ", QuoteStyle.None),"customer_name")
+				in
+				    #"Объединенные столбцы"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Навигация
+

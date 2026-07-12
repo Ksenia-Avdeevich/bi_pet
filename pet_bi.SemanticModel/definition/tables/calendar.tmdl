@@ -1,0 +1,46 @@
+table calendar
+	lineageTag: 6f25d990-c9a4-48e8-b260-3b371715182b
+
+	column Date
+		formatString: Long Date
+		lineageTag: 28ddbbf7-ecda-4141-8645-def5ac96362b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		variation Изменение
+			isDefault
+			relationship: bdc3cdaa-2f48-4f73-b459-0798c71799b8
+			defaultHierarchy: LocalDateTable_d1f2cb16-0c74-406c-bcfd-44dc9f4ae269.'Иерархия дат'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column year = YEAR('calendar'[Date])
+		formatString: 0
+		lineageTag: 1e57a54a-14e1-4f93-b2b7-830a64f96214
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column month = FORMAT('calendar'[Date], "mmm")
+		lineageTag: e25e2a7d-f125-4a24-b7b5-bed6e2b253d8
+		summarizeBy: none
+		sortByColumn: '1 month no'
+
+		annotation SummarizationSetBy = Automatic
+
+	column '1 month no' = MONTH('calendar'[Date])
+		formatString: 0
+		lineageTag: 5adb4629-5d46-4220-bff2-7a551ca9e48f
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition calendar = calculated
+		mode: import
+		source = CALENDAR(MIN(finance_transactions[transaction_date]), MAX(finance_transactions[transaction_date]))
+
+	annotation PBI_Id = 0a31c0cc9bfe493095f86d957003ee74
+

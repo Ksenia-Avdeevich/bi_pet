@@ -1,0 +1,264 @@
+table finance_transactions
+	lineageTag: 3000f5ce-2316-4cf9-87ab-c1efa85c6e9d
+
+	measure 'dahboard title' = "Финансовый анализ"
+		lineageTag: 6efacf11-56bd-4d94-9ba1-826ea8321ea5
+
+	measure 'total amount' = ```
+			SUM(finance_transactions[amount]) 
+			```
+		lineageTag: 97bf96aa-006f-4f89-9889-60d8120aee76
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'PY amount' = CALCULATE([total amount], SAMEPERIODLASTYEAR('calendar'[Date]))
+		lineageTag: 391f4780-072d-45cf-9634-50e453a3d7b8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'YoY amount' = [total amount] - [PY amount]
+		lineageTag: 8d08fc28-9dc6-4cdc-8235-77432d7404d0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'YoY % amount' = ```
+			DIVIDE([YoY amount], [PY amount]) 
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 44115135-1104-4298-b64c-1024e8f1bf24
+
+	measure 'total transactions' = ```
+			DISTINCTCOUNT(finance_transactions[transaction_id]) 
+			```
+		formatString: 0
+		lineageTag: c43f9d61-54e6-4861-b285-eb4d582f685e
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'PY transaction' = CALCULATE([total transactions], SAMEPERIODLASTYEAR('calendar'[Date]))
+		formatString: 0
+		lineageTag: b3d74f90-3abf-4bcc-89a1-e33827a0c62c
+
+	measure 'YoY transactions' = ```
+			[total transactions] - [PY transaction] 
+			```
+		lineageTag: aa9c4228-b6cf-44d1-8a9d-1e4486dca603
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'YoY % transactions' = ```
+			DIVIDE([YoY transactions], [PY transaction]) 
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 5d9f3ca1-d799-4313-a005-c11eeabcedee
+
+	measure 'avg transaction value' = ```
+			AVERAGE(finance_transactions[amount]) 
+			```
+		lineageTag: a1087969-4cf3-4ee4-b059-5a30c1a0b2ea
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'PY avg transaction' = CALCULATE([avg transaction value], SAMEPERIODLASTYEAR('calendar'[Date]))
+		lineageTag: af9a8640-46dc-457b-92ea-d31efa534e1a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'YoY avg transactions' = ```
+			[avg transaction value] - [PY avg transaction] 
+			```
+		lineageTag: af79af45-bd10-423a-bb6d-b7bbcfbca6e7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'YoY % avg transactions' = ```
+			DIVIDE([YoY avg transactions], [PY avg transaction]) 
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 3e040c9f-4222-45d8-821b-18381f2490fd
+
+	measure 'total fees' = ```
+			SUM(finance_transactions[fee_amount]) 
+			```
+		lineageTag: 2d31af11-3997-462b-8a81-f3f0de2d5b37
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'PY fees' = CALCULATE([total fees], SAMEPERIODLASTYEAR('calendar'[Date]))
+		lineageTag: 2a4e50f7-6da2-444e-8e98-7eac557d8e51
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'YoY fees' = ```
+			[total fees] - [PY fees] 
+			```
+		lineageTag: 6a3df9a2-f18d-44d1-9180-35746407b6b6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'YoY % fees' = ```
+			DIVIDE([YoY fees], [PY fees]) 
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: b6e6c622-3bc0-448f-acf9-ea0588d462b2
+
+	measure 'selected year' = SELECTEDVALUE('calendar'[year])
+		formatString: 0
+		lineageTag: ab7f9758-2794-45cf-a2af-5c953536bb29
+
+	measure 'selected dynamic measure' = SELECTEDVALUE('dynamic metric'[dynamic title])
+		lineageTag: 65083099-fe17-478f-aa31-3821d2ffafd9
+
+	column transaction_id
+		dataType: string
+		lineageTag: a29e905f-d4d9-42ac-ba97-44b3abe0aedc
+		summarizeBy: none
+		sourceColumn: transaction_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column transaction_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 52383f32-9866-4801-9714-1a41806bd794
+		summarizeBy: none
+		sourceColumn: transaction_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column account_id
+		dataType: string
+		lineageTag: bc0c5ac3-61e0-4581-a283-eba887b32e1e
+		summarizeBy: none
+		sourceColumn: account_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		lineageTag: 08ac9a3a-baff-4ce0-b3f5-c84ab7d656bd
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column transaction_type
+		dataType: string
+		lineageTag: 61b74b3e-b9a5-4f85-8826-75951ccb1f62
+		summarizeBy: none
+		sourceColumn: transaction_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel
+		dataType: string
+		lineageTag: 6ec43006-0f73-4577-bca9-044869a8a54d
+		summarizeBy: none
+		sourceColumn: channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column merchant_category
+		dataType: string
+		lineageTag: 140046af-8911-4a24-b94a-86ece1f25bb9
+		summarizeBy: none
+		sourceColumn: merchant_category
+
+		annotation SummarizationSetBy = Automatic
+
+	column amount
+		dataType: double
+		lineageTag: 60133234-915d-4786-b8ea-c4baf5eeb0c6
+		summarizeBy: sum
+		sourceColumn: amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fee_amount
+		dataType: double
+		lineageTag: 7b77566f-db46-46ee-ab0d-b2c09044588b
+		summarizeBy: sum
+		sourceColumn: fee_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column tax_amount
+		dataType: double
+		lineageTag: 3ec5448b-2c50-4962-841a-2c2ff5e8f6e5
+		summarizeBy: sum
+		sourceColumn: tax_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column currency
+		dataType: string
+		lineageTag: f7fd9acb-81bc-426b-960b-85dbc3b6fdbb
+		summarizeBy: none
+		sourceColumn: currency
+
+		annotation SummarizationSetBy = Automatic
+
+	column transaction_status
+		dataType: string
+		lineageTag: 250da799-0434-4c26-9bde-7c354724b15e
+		summarizeBy: none
+		sourceColumn: transaction_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_fraud
+		dataType: string
+		lineageTag: 3c6579a9-f3fa-492a-85d8-5194024fda8b
+		summarizeBy: none
+		sourceColumn: is_fraud
+
+		annotation SummarizationSetBy = Automatic
+
+	column risk_score
+		dataType: int64
+		formatString: 0
+		lineageTag: 1c1747c0-0398-4bfa-b83b-45509d4b842e
+		summarizeBy: sum
+		sourceColumn: risk_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column reference_no
+		dataType: string
+		lineageTag: 54459202-f5fe-424e-8650-b56bc0034199
+		summarizeBy: none
+		sourceColumn: reference_no
+
+		annotation SummarizationSetBy = Automatic
+
+	partition finance_transactions = m
+		mode: import
+		source =
+				let
+				    Источник = Csv.Document(File.Contents("D:\личное\т-банк экз\2026\пэт\bi\finance_transactions.csv"),[Delimiter=";", Columns=15, Encoding=1251, QuoteStyle=QuoteStyle.None]),
+				    #"Повышенные заголовки" = Table.PromoteHeaders(Источник, [PromoteAllScalars=true]),
+				    #"Измененный тип с языком" = Table.TransformColumnTypes(#"Повышенные заголовки", {{"amount", type number}}, "en-US"),
+				    #"Измененный тип с языком1" = Table.TransformColumnTypes(#"Измененный тип с языком", {{"fee_amount", type number}}, "en-US"),
+				    #"Измененный тип" = Table.TransformColumnTypes(#"Измененный тип с языком1",{{"transaction_date", type date}}),
+				    #"Измененный тип с языком2" = Table.TransformColumnTypes(#"Измененный тип", {{"tax_amount", type number}}, "en-US"),
+				    #"Измененный тип1" = Table.TransformColumnTypes(#"Измененный тип с языком2",{{"risk_score", Int64.Type}}),
+				    #"Удаленные дубликаты" = Table.Distinct(#"Измененный тип1", {"transaction_id"}),
+				    #"Обрезанный текст" = Table.TransformColumns(#"Удаленные дубликаты",{{"channel", Text.Trim, type text}}),
+				    #"Вычисленное абсолютное значение" = Table.TransformColumns(#"Обрезанный текст",{{"amount", Number.Abs, type number}}),
+				    #"Замененное значение" = Table.ReplaceValue(#"Вычисленное абсолютное значение",null,14.52,Replacer.ReplaceValue,{"fee_amount"}),
+				    #"Текст в верхнем регистре" = Table.TransformColumns(#"Замененное значение",{{"currency", Text.Upper, type text}})
+				in
+				    #"Текст в верхнем регистре"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Навигация
+

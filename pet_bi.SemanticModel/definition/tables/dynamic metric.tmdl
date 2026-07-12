@@ -1,0 +1,56 @@
+table 'dynamic metric'
+	lineageTag: 89cec505-9c7e-4a88-886f-81ea940b7249
+
+	column 'dynamic metric'
+		lineageTag: 80dce63d-967d-4b43-a527-6b0807af436d
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Заказ dynamic metric'
+
+		relatedColumnDetails
+			groupByColumn: 'Поля: dynamic metric'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Поля: dynamic metric'
+		lineageTag: b570656a-7836-4cbb-9a70-f08f4ad105a2
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Заказ dynamic metric'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Заказ dynamic metric'
+		formatString: 0
+		lineageTag: e605e24a-3caa-407c-b093-921835ecf4eb
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'dynamic title' =
+			SWITCH('dynamic metric'[Заказ dynamic metric], 0, "общая сумма",
+			                                                               1, "общая комиссия",
+			                                                               2, "всего транзакций", "другое")
+		lineageTag: 85cd5099-3ccc-406c-a07a-101a42e93ea9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dynamic metric' = calculated
+		mode: import
+		source =
+				{
+				    ("общая сумма", NAMEOF('finance_transactions'[total amount]), 0),
+				    ("общая комиссия", NAMEOF('finance_transactions'[total fees]), 1),
+				    ("всего транзакций", NAMEOF('finance_transactions'[total transactions]), 2)
+				}
+
+	annotation PBI_Id = da067ab7b0d548ddb6bdfd9de8d8952f
+
